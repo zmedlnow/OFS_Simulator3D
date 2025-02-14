@@ -1,4 +1,4 @@
-A Fork of OpenFunScripter's OFS_Simulator3D that fixes some issues.
+A Fork of Falafel's Fork of OpenFunScripter's OFS_Simulator3D, focused on visualization of four phase scripts used with restim.
 
 <img src="https://github.com/ZestyRaraferu/OFS_Simulator3D/blob/1.2.1/favicon.png" width="128">
 
