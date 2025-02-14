@@ -224,8 +224,8 @@ public class Simulator3D : Spatial
 		}
 
 		indicatorMesh.Translation = new Vector3(
-			Mathf.Lerp(0.5f, -0.5f, alpha),
 			Mathf.Lerp(0.5f, -0.5f, beta),
+			Mathf.Lerp(-0.5f, 0.5f, alpha),
 			Mathf.Lerp(0.5f, -0.5f, gamma)
 		);
 	}
