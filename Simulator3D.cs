@@ -28,7 +28,7 @@ public class Simulator3D : Spatial
 		}
 
 		label = GetNode<Label>("UI/Label");
-		indicatorMesh = GetNode<MeshInstance>("Indicator");
+		indicatorMesh = GetNode<MeshInstance>("Space/Indicator");
 
 		webSocketClient = new WebSocketClient();
 		webSocketClient.Connect("connection_closed", this, nameof(connectionClosed));
