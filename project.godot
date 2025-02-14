@@ -18,6 +18,7 @@ config/icon="res://favicon.png"
 [display]
 
 window/size/width=400
+window/size/height=400
 window/per_pixel_transparency/allowed=true
 window/per_pixel_transparency/enabled=true
 

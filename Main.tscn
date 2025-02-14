@@ -6,8 +6,6 @@
 [ext_resource path="res://InputListener.gd" type="Script" id=6]
 
 [sub_resource type="SphereMesh" id=14]
-radius = 0.5
-height = 1.0
 
 [sub_resource type="SpatialMaterial" id=6]
 vertex_color_use_as_albedo = true
@@ -16,8 +14,8 @@ proximity_fade_enable = true
 proximity_fade_distance = 0.8
 
 [sub_resource type="SphereMesh" id=15]
-radius = 0.025
-height = 0.05
+radius = 0.05
+height = 0.1
 
 [sub_resource type="SpatialMaterial" id=4]
 vertex_color_use_as_albedo = true
@@ -60,35 +58,40 @@ mesh = SubResource( 15 )
 material/0 = SubResource( 4 )
 
 [node name="Neutral" type="Position3D" parent="Space"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.5, 0 )
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, 0 )
 
 [node name="NIndicator" type="MeshInstance" parent="Space/Neutral"]
 mesh = SubResource( 15 )
 material/0 = SubResource( 16 )
 
 [node name="L+" type="Position3D" parent="Space"]
-transform = Transform( -0.5, -0.433013, 0.75, 0, 0.866025, 0.5, -0.866025, 0.25, -0.433013, -0.375, -0.25, 0.217 )
+transform = Transform( -0.5, -0.433013, 0.75, 0, 0.866025, 0.5, -0.866025, 0.25, -0.433013, -0.75, -0.5, 0.434 )
 
 [node name="LIndicator" type="MeshInstance" parent="Space/L+"]
 mesh = SubResource( 15 )
 material/0 = SubResource( 17 )
 
 [node name="R+" type="Position3D" parent="Space"]
-transform = Transform( -0.5, 0.433013, -0.75, 0, 0.866025, 0.5, 0.866025, 0.25, -0.433013, 0.375, -0.25, 0.217 )
+transform = Transform( -0.5, 0.433013, -0.75, 0, 0.866025, 0.5, 0.866025, 0.25, -0.433013, 0.75, -0.5, 0.425 )
 
 [node name="RIndicator" type="MeshInstance" parent="Space/R+"]
 mesh = SubResource( 15 )
 material/0 = SubResource( 18 )
 
 [node name="C+" type="Position3D" parent="Space"]
-transform = Transform( 1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, -0.25, -0.433 )
+transform = Transform( 1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, -0.5, -0.866 )
 
 [node name="CIndicator" type="MeshInstance" parent="Space/C+"]
 mesh = SubResource( 15 )
 material/0 = SubResource( 19 )
 
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.25 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4 )
+size = 5.0
+far = 50.0
+
+[node name="Camera2" type="Camera" parent="."]
+transform = Transform( 0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 3, 3, 4 )
 size = 5.0
 far = 50.0
 

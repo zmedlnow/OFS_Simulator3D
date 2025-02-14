@@ -17,6 +17,7 @@ public class Simulator3D : Spatial
 
 	private Label label;
 	private MeshInstance indicatorMesh;
+	private MeshInstance spaceMesh;
 	private Funscript[] scripts = new Funscript[(int)ScriptType.TypeCount];
 
 	public override void _Ready()
@@ -29,6 +30,7 @@ public class Simulator3D : Spatial
 
 		label = GetNode<Label>("UI/Label");
 		indicatorMesh = GetNode<MeshInstance>("Space/Indicator");
+		spaceMesh = GetNode<MeshInstance>("Space");
 
 		webSocketClient = new WebSocketClient();
 		webSocketClient.Connect("connection_closed", this, nameof(connectionClosed));
@@ -224,9 +226,14 @@ public class Simulator3D : Spatial
 		}
 
 		indicatorMesh.Translation = new Vector3(
-			Mathf.Lerp(0.5f, -0.5f, beta),
-			Mathf.Lerp(-0.5f, 0.5f, alpha),
-			Mathf.Lerp(0.5f, -0.5f, gamma)
+			Mathf.Lerp(1.0f, -1.0f, beta),
+			Mathf.Lerp(-1.0f, 1.0f, alpha),
+			Mathf.Lerp(1.0f, -1.0f, gamma)
 		);
+
+		if(indicatorMesh.Translation.Length() > 1)
+		{
+			GD.Print("Vector too long");
+		}
 	}
 }
