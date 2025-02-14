@@ -6,11 +6,9 @@ using System.Linq;
 public enum ScriptType
 {
     MainStroke,
-    Sway,
-    Surge,
-    Roll,
-    Pitch,
-    Twist,
+    Alpha,
+    Beta,
+    Gamma,
     TypeCount
 }
 

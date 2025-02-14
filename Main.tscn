@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Simulator3D.cs" type="Script" id=1]
 [ext_resource path="res://BorderlessWindow.cs" type="Script" id=2]
@@ -8,35 +8,35 @@
 
 [sub_resource type="SpatialMaterial" id=8]
 
-[sub_resource type="CylinderMesh" id=5]
-top_radius = 0.5
-bottom_radius = 0.5
-height = 1.75
-radial_segments = 32
+[sub_resource type="SphereMesh" id=14]
+radius = 0.5
+height = 1.0
 
 [sub_resource type="SpatialMaterial" id=6]
 vertex_color_use_as_albedo = true
+albedo_color = Color( 0.878431, 0.878431, 0.878431, 0.215686 )
 proximity_fade_enable = true
 proximity_fade_distance = 0.8
 
-[sub_resource type="CubeMesh" id=3]
-size = Vector3( 0.25, 0.25, 0.25 )
+[sub_resource type="SphereMesh" id=15]
+radius = 0.025
+height = 0.05
 
 [sub_resource type="SpatialMaterial" id=4]
 vertex_color_use_as_albedo = true
+albedo_color = Color( 1, 0, 1, 1 )
+
+[sub_resource type="SpatialMaterial" id=16]
+albedo_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="SpatialMaterial" id=17]
 albedo_color = Color( 1, 0, 0, 1 )
 
-[sub_resource type="SpatialMaterial" id=7]
-albedo_color = Color( 0.505882, 0.121569, 0.85098, 1 )
+[sub_resource type="SpatialMaterial" id=18]
+albedo_color = Color( 0, 0, 1, 1 )
 
-[sub_resource type="CapsuleMesh" id=10]
-radius = 0.5
-radial_segments = 32
-rings = 4
-
-[sub_resource type="SpatialMaterial" id=11]
-flags_use_point_size = true
-albedo_color = Color( 1, 0.380392, 0.380392, 1 )
+[sub_resource type="SpatialMaterial" id=19]
+albedo_color = Color( 0, 1, 0, 1 )
 
 [sub_resource type="Environment" id=2]
 ambient_light_color = Color( 1, 1, 1, 1 )
@@ -60,29 +60,41 @@ material_override = SubResource( 8 )
 cast_shadow = 0
 script = ExtResource( 4 )
 
-[node name="Stroker" type="MeshInstance" parent="."]
-mesh = SubResource( 5 )
+[node name="Space" type="MeshInstance" parent="."]
+mesh = SubResource( 14 )
 material/0 = SubResource( 6 )
 
-[node name="Twist1" type="MeshInstance" parent="Stroker"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0 )
-mesh = SubResource( 3 )
+[node name="Indicator" type="MeshInstance" parent="Space"]
+mesh = SubResource( 15 )
 material/0 = SubResource( 4 )
 
-[node name="Twist2" type="MeshInstance" parent="Stroker"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0 )
-mesh = SubResource( 3 )
-skeleton = NodePath("../Twist1")
-material/0 = SubResource( 7 )
+[node name="Neutral" type="Position3D" parent="Space"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.5, 0 )
 
-[node name="Top" type="Position3D" parent="Stroker"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.875, 0 )
+[node name="NIndicator" type="MeshInstance" parent="Space/Neutral"]
+mesh = SubResource( 15 )
+material/0 = SubResource( 16 )
 
-[node name="Tongue" type="MeshInstance" parent="Stroker"]
-transform = Transform( 0.689567, 0, 0, 0, -2.42681e-08, 0.555189, 0, -0.310956, -1.35923e-08, 0, -0.673036, -0.295351 )
-visible = false
-mesh = SubResource( 10 )
-material/0 = SubResource( 11 )
+[node name="L+" type="Position3D" parent="Space"]
+transform = Transform( -0.5, -0.433013, 0.75, 0, 0.866025, 0.5, -0.866025, 0.25, -0.433013, -0.375, -0.25, 0.217 )
+
+[node name="LIndicator" type="MeshInstance" parent="Space/L+"]
+mesh = SubResource( 15 )
+material/0 = SubResource( 17 )
+
+[node name="R+" type="Position3D" parent="Space"]
+transform = Transform( -0.5, 0.433013, -0.75, 0, 0.866025, 0.5, 0.866025, 0.25, -0.433013, 0.375, -0.25, 0.217 )
+
+[node name="RIndicator" type="MeshInstance" parent="Space/R+"]
+mesh = SubResource( 15 )
+material/0 = SubResource( 18 )
+
+[node name="C+" type="Position3D" parent="Space"]
+transform = Transform( 1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, -0.25, -0.433 )
+
+[node name="CIndicator" type="MeshInstance" parent="Space/C+"]
+mesh = SubResource( 15 )
+material/0 = SubResource( 19 )
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.25 )

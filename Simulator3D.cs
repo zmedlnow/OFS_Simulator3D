@@ -16,7 +16,7 @@ public class Simulator3D : Spatial
 	public float PlaybackSpeed { get; private set; } = 1.0f;
 
 	private Label label;
-	private MeshInstance strokerMesh;
+	private MeshInstance indicatorMesh;
 	private Funscript[] scripts = new Funscript[(int)ScriptType.TypeCount];
 
 	public override void _Ready()
@@ -28,7 +28,7 @@ public class Simulator3D : Spatial
 		}
 
 		label = GetNode<Label>("UI/Label");
-		strokerMesh = GetNode<MeshInstance>("Stroker");
+		indicatorMesh = GetNode<MeshInstance>("Indicator");
 
 		webSocketClient = new WebSocketClient();
 		webSocketClient.Connect("connection_closed", this, nameof(connectionClosed));
@@ -72,16 +72,12 @@ public class Simulator3D : Spatial
 			return ScriptType.MainStroke;
 
 		var last = elements.Last().ToLower();
-		if (last.Contains("roll") || last.Contains("r1"))
-			return ScriptType.Roll;
-		else if (last.Contains("pitch") || last.Contains("r2"))
-			return ScriptType.Pitch;
-		else if (last.Contains("twist") || last.Contains("r0"))
-			return ScriptType.Twist;
-		else if (last.Contains("sway") || last.Contains("l2"))
-			return ScriptType.Sway;
-		else if (last.Contains("surge") || last.Contains("l1"))
-			return ScriptType.Surge;
+		if (last.Contains("alpha") || last.Contains("e0"))
+			return ScriptType.Alpha;
+		else if (last.Contains("beta") || last.Contains("e1"))
+			return ScriptType.Beta;
+		else if (last.Contains("gamma") || last.Contains("e2"))
+			return ScriptType.Gamma;
 
 		return null;
 	}
@@ -199,11 +195,9 @@ public class Simulator3D : Spatial
 		}
 
 		float mainStroke = 0.5f;
-		float sway = 0.5f;
-		float surge = 0.5f;
-		float roll = 0.5f;
-		float pitch = 0.5f;
-		float twist = 0.5f;
+		float alpha = 0.5f;
+		float beta  = 0.5f;
+		float gamma = 0.5f;
 
 		if(scripts[(int)ScriptType.MainStroke] != null)
 		{
@@ -211,64 +205,28 @@ public class Simulator3D : Spatial
 			mainStroke = script.GetPositionAt(CurrentTime);
 		}
 
-		if(scripts[(int)ScriptType.Sway] != null)
+		if(scripts[(int)ScriptType.Alpha] != null)
 		{
-			var script = scripts[(int)ScriptType.Sway];
-			sway = script.GetPositionAt(CurrentTime);
+			var script = scripts[(int)ScriptType.Alpha];
+			alpha = script.GetPositionAt(CurrentTime);
 		}
 
-		if(scripts[(int)ScriptType.Surge] != null)
+		if(scripts[(int)ScriptType.Beta] != null)
 		{
-			var script = scripts[(int)ScriptType.Surge];
-			surge = script.GetPositionAt(CurrentTime);
+			var script = scripts[(int)ScriptType.Beta];
+			beta  = script.GetPositionAt(CurrentTime);
 		}
 
-		if(scripts[(int)ScriptType.Roll] != null)
+		if(scripts[(int)ScriptType.Gamma] != null)
 		{
-			var script = scripts[(int)ScriptType.Roll];
-			roll = script.GetPositionAt(CurrentTime);
+			var script = scripts[(int)ScriptType.Gamma];
+			gamma = script.GetPositionAt(CurrentTime);
 		}
 
-		if(scripts[(int)ScriptType.Pitch] != null)
-		{
-			var script = scripts[(int)ScriptType.Pitch];
-			pitch = script.GetPositionAt(CurrentTime);
-		}
-		
-		if(scripts[(int)ScriptType.Twist] != null)
-		{
-			var script = scripts[(int)ScriptType.Twist];
-			twist = script.GetPositionAt(CurrentTime);
-		}
-
-		strokerMesh.RotationDegrees = new Vector3(
-			0.0f,
-			0.0f,
-			0.0f
-		);
-
-		strokerMesh.GlobalRotate(Vector3.Right,
-			Mathf.Deg2Rad(
-				Mathf.Lerp(30f, -30f, pitch)
-			)
-		);
-
-		strokerMesh.GlobalRotate(Vector3.Forward,
-			Mathf.Deg2Rad(
-				Mathf.Lerp(-30.0f, 30.0f, roll)
-			)
-		);
-
-		strokerMesh.RotateObjectLocal(Vector3.Up, 
-			Mathf.Deg2Rad(
-				Mathf.Lerp(-135.0f, 135.0f, twist)
-			)
-		);
-
-		strokerMesh.Translation = new Vector3(
-			Mathf.Lerp(0.5f, -0.5f, sway),
-			Mathf.Lerp(-1.0f, 1.0f, mainStroke),
-			Mathf.Lerp(0.5f, -0.5f, surge)
+		indicatorMesh.Translation = new Vector3(
+			Mathf.Lerp(0.5f, -0.5f, alpha),
+			Mathf.Lerp(0.5f, -0.5f, beta),
+			Mathf.Lerp(0.5f, -0.5f, gamma)
 		);
 	}
 }
