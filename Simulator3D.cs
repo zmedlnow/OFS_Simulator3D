@@ -2,6 +2,10 @@ using Godot;
 using System;
 using System.Text;
 using System.Linq;
+using System.Numerics;
+using System.Drawing.Drawing2D;
+using Numpy;
+using System.Xml;
 
 public class Simulator3D : Spatial
 {
@@ -16,6 +20,11 @@ public class Simulator3D : Spatial
 	public float PlaybackSpeed { get; private set; } = 1.0f;
 
 	private Label label;
+	private Label vectorLabel;
+	private Label neutralLabel;
+	private Label leftLabel;
+	private Label rightLabel;
+	private Label centerLabel;
 	private MeshInstance indicatorMesh;
 	private MeshInstance spaceMesh;
 	private Funscript[] scripts = new Funscript[(int)ScriptType.TypeCount];
@@ -29,6 +38,11 @@ public class Simulator3D : Spatial
 		}
 
 		label = GetNode<Label>("UI/Label");
+		vectorLabel = GetNode<Label>("UI/VectorLength");
+		neutralLabel = GetNode<Label>("UI/NeutralAmp");
+		leftLabel = GetNode<Label>("UI/LeftAmp");
+		rightLabel = GetNode<Label>("UI/RightAmp");
+		centerLabel = GetNode<Label>("UI/CenterAmp");
 		indicatorMesh = GetNode<MeshInstance>("Space/Indicator");
 		spaceMesh = GetNode<MeshInstance>("Space");
 
@@ -186,6 +200,31 @@ public class Simulator3D : Spatial
 		}        
 	}
 
+	private static float[] results(double alpha, double beta, double gamma)
+	{
+		double coeff_1 = 1f;
+		double coeff_2 = Math.Sqrt(8) / 3;
+		double coeff_3 = Math.Sqrt(2) / Math.Sqrt(3);
+
+		var v1 = np.array(new[] {coeff_1, 0, 0});
+		var v2 = np.array(new[] {coeff_1/-3, coeff_2, 0});
+		var v3 = np.array(new[] {coeff_1/-3, coeff_2/-2, coeff_3});
+		var v4 = np.array(new[] {coeff_1/-3, coeff_2/-2, coeff_3/-1});
+
+		var pos = np.array(new[] {alpha, beta, gamma});
+
+		var r = np.linalg.norm(pos);
+	
+		var neutral = 1 - r + np.abs(np.dot(v1, pos));
+		var left    = 1 - r + np.abs(np.dot(v2, pos));
+		var right   = 1 - r + np.abs(np.dot(v3, pos));
+		var center  = 1 - r + np.abs(np.dot(v4, pos));
+
+		float[] output = {(float)neutral, (float)left, (float)right, (float)center, (float)r};
+
+		return output;
+	}
+
 	public override void _Process(float delta)
 	{
 		webSocketClient.Poll();
@@ -225,15 +264,27 @@ public class Simulator3D : Spatial
 			gamma = script.GetPositionAt(CurrentTime);
 		}
 
-		indicatorMesh.Translation = new Vector3(
-			Mathf.Lerp(1.0f, -1.0f, beta),
-			Mathf.Lerp(-1.0f, 1.0f, alpha),
-			Mathf.Lerp(1.0f, -1.0f, gamma)
+		double lAlpha = Mathf.Lerp(-1.0f, 1.0f, alpha);
+		double lBeta = Mathf.Lerp(1.0f, -1.0f, beta);
+		double lGamma = Mathf.Lerp(1.0f, -1.0f, gamma);
+
+		indicatorMesh.Translation = new Godot.Vector3(
+			(float)lBeta,
+			(float)lAlpha,
+			(float)lGamma
 		);
 
 		if(indicatorMesh.Translation.Length() > 1)
 		{
 			GD.Print("Vector too long");
 		}
+
+		var newdata = results(lAlpha, lBeta, lGamma);
+
+		neutralLabel.Text = newdata[0].ToString("0.00");
+		leftLabel.Text = newdata[1].ToString("0.00");
+		rightLabel.Text = newdata[2].ToString("0.00");
+		centerLabel.Text = newdata[3].ToString("0.00");
+		vectorLabel.Text = newdata[4].ToString("0.00");
 	}
 }
