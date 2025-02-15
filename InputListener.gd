@@ -11,6 +11,7 @@ onready var r_indicator = $"../R+/RIndicator"
 onready var c_indicator = $"../C+/CIndicator"
 
 onready var line_drawer = $"../Line"
+onready var tetrahedron = $"../Tetrahedron"
 
 onready var front_camera = $"../Camera"
 onready var upper_camera = $"../Camera2"
@@ -29,6 +30,8 @@ func _input(event):
 		c_indicator.visible = not c_indicator.visible
 	if event is InputEventKey and event.pressed and event.scancode == KEY_L:
 		line_drawer.visible = not line_drawer.visible
+	if event is InputEventKey and event.pressed and event.scancode == KEY_T:
+		tetrahedron.visible = not tetrahedron.visible
 	if event is InputEventKey and event.pressed and event.scancode == KEY_P:
 		if front_camera.projection == Camera.PROJECTION_PERSPECTIVE:
 			front_camera.projection = Camera.PROJECTION_ORTHOGONAL
