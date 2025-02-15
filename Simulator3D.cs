@@ -43,7 +43,7 @@ public class Simulator3D : Spatial
 		leftLabel = GetNode<Label>("UI/LeftAmp");
 		rightLabel = GetNode<Label>("UI/RightAmp");
 		centerLabel = GetNode<Label>("UI/CenterAmp");
-		indicatorMesh = GetNode<MeshInstance>("Space/Indicator");
+		indicatorMesh = GetNode<MeshInstance>("Indicator");
 		spaceMesh = GetNode<MeshInstance>("Space");
 
 		webSocketClient = new WebSocketClient();
@@ -276,7 +276,9 @@ public class Simulator3D : Spatial
 
 		if(indicatorMesh.Translation.Length() > 1)
 		{
-			GD.Print("Vector too long");
+			vectorLabel.AddColorOverride("font_color", Color.Color8(255, 0, 0, 255));
+		} else {
+			vectorLabel.RemoveColorOverride("font_color");
 		}
 
 		var newdata = results(lAlpha, lBeta, lGamma);
