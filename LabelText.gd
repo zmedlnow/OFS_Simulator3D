@@ -55,8 +55,8 @@ func calc_vector():
 	return distance
 
 func update_text(n, l, r, c, v):
-	n_amplitude.text = str(n)
-	l_amplitude.text = str(l)
-	r_amplitude.text = str(r)
-	c_amplitude.text = str(c)
-	vector_length.text = str(v)
+	n_amplitude.text = "%0.3f" % n
+	l_amplitude.text = "%0.3f" % l
+	r_amplitude.text = "%0.3f" % r
+	c_amplitude.text = "%0.3f" % c
+	vector_length.text = "%0.3f" % v
